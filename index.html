@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="invoice-container">
+        <header class="invoice-header">
+            <div class="header-left">
+                <img src="./logo.png" alt="Company Logo" class="company-logo">
+                <div class="company-info">
+                    <p><strong>V. K. Tooling Solutions</strong></p>
+                    <p contenteditable="true">GSTIN: XYZ9932412 </p>
+                    <p contenteditable="true">Address 1:</p>
+                    <p contenteditable="true">Address 2:</p>
+                    <p contenteditable="true">City, State</p>
+                    <p contenteditable="true">India </p>
+                    <p contenteditable="true">Email: </p>
+                </div>
+            </div>
+            <div class="header-right">
+                <h1 style="border-left: 1px solid rgb(0, 76, 255);">EXPORT INVOICE</h1>
+
+
+                <div style="border: 1px solid #000;" class="original-copy-box">
+                    <p class="original-copy">Original Copy</p>
+                </div>
+
+                <button id="printInvoice" class="print-button">Print Invoice</button>
+                 <button id="savePdf" class="print-button">Save as PDF</button>
+                 <div class="invoice-details">
+                    <p>Invoice #: <span contenteditable="true">SOL/239/25-26</span></p>
+                    <p>Invoice Date: <span contenteditable="true" id="invoice-date">18 Jun 2025</span></p>
+                    <p>Place of Supply:<br> <span contenteditable="true">Address</span></p>
+                    <p><span contenteditable="true">empty</span></p>
+                    <p>Conversion Rate:<span contenteditable="true">1</span></p>
+                    <p>Currency: <span contenteditable="true">INR</span></p>
+                    <p>Export Type: <span contenteditable="true">SEZ without IGST Payment</span></p>
+                    <p>Country Name: <span contenteditable="true">India</span></p>
+                </div>
+            </div>
+        </header>
+
+        <section class="customer-shipping-info">
+            <div class="customer-info">
+                <p><strong>Customer:</strong></p>
+                <p><span contenteditable="true">Name</span></p>
+                <p><span contenteditable="true">Info</span></p>
+                <p>GSTIN: <span contenteditable="true">23SDCADI12</span></p>
+                <p><strong>Billing Address:</strong></p>
+                <p><span contenteditable="true">Address 1</span></p>
+                <p><span contenteditable="true">Address 2</span></p>
+                <p><span contenteditable="true">State, Pincode</span></p>
+            </div>
+            <div class="PO-info">
+                <!-- <p><strong>PO No.:</strong></p> -->
+                <!-- <p><span contenteditable="true">GP PARSIK</span></p> -->
+                <!-- <p><span contenteditable="true">GP PARSIK</span></p> -->
+                <p>P.O. No.: <span contenteditable="true">29AAAAP0267H1ZK</span></p>
+                <p>P.O. Date: <span contenteditable="true">00-00-0000</span></p>
+                <p>Vendor Code: <span contenteditable="true">0000</span></p>
+                <p>Date of Suplly: <span contenteditable="true">0000</span></p>
+            </div>
+            <div class="shipping-info">
+                <p><strong>Ship To:</strong></p>
+                <p><span contenteditable="true">Address</span></p>
+                <p><span contenteditable="true">State, Pincode</span></p>
+            </div>
+        </section>
+
+        <section class="items-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl.</th>
+                        <th>Description of Goods</th>
+                        <th>HSN/SAC</th>
+                        <th>Rate1</th>
+                        <th>QTY</th>
+                        <th>Net Amt</th>
+                        <th>Tax Amount</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true" class="item-sl">1</td>
+                        <td contenteditable="true" class="item-description">Item Name</td>
+                        <td contenteditable="true" class="item-hsn-sac">--</td>
+                        <td contenteditable="true" class="item-rate">0.00</td>
+                        <td contenteditable="true" class="item-qty">0 piece</td>
+                        <td contenteditable="false" class="item-net-amt">0.00</td>
+                        <td contenteditable="false" class="item-tax-amt">0.00 </td>
+                        <td contenteditable="false" class="item-total-amt">0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="total-items">Total Items / Qty: <span id="total-items-count">1</span> / <span id="total-qty-count">1</span></p>
+             <button id="addItem">Add Item</button>
+             <p>GST Rate: <span contenteditable="true" id="gst-rate-input">18</span>%</p>
+
+        </section>
+
+        <section class="invoice-summary">
+            <div class="summary-row">
+                <p><strong>Total</strong></p>
+                <p><strong id="overall-total">₹0.00</strong></p>
+            </div>
+            <div class="summary-row">
+                <p><strong>Total(INR)</strong></p>
+                <p><strong id="overall-total-inr">₹0.00</strong></p>
+            </div>
+            <p id="amount-in-words">Total amount (in words): INR One Thousand, Eight Hundred And Forty-Six Rupees Only.</p>
+            <p class="for-einvoices">For Einvoices (Sales)</p>
+        </section>
+
+        <!-- <section class="amount-in-words"> -->
+            <!-- <p class="amount-payable">Amount Payable: <strong>₹0.00</strong></p> -->
+        <!-- </section> -->
+
+        <section class="bank-details-signature">
+            <div class="bank-details">
+                <p><strong>Bank Details:</strong></p>
+                <p>Bank: <span contenteditable="true">HDFC</span></p>
+                <p>Account #: <span contenteditable="true">123458990</span></p>
+                <p>IFSC Code: <span contenteditable="true">FY123456</span></p>
+                <p>Branch: <span contenteditable="true">HYD.123</span></p>
+            </div>
+            <div class="signature-block">
+                
+                <p style="color: white;"><strong>Authorized Signatory</strong></p>
+                <p><strong>Authorized Signatory</strong></p>
+            </div>
+        </section>
+
+        <section class="notes-terms">
+            <div class="notes">
+                <p><strong>*Supply meant for SEZ under LUT without Payment of Integrated Tax</strong></p>
+                <p><strong>Notes:</strong></p>
+                <p>Thank you for your Business!</p>
+            </div>
+            <div class="terms-conditions">
+                <p><strong>Terms and Conditions:</strong></p>
+                <p>Do not accept if seal is broken</p>
+            </div>
+        </section>
+
+        
+
+        <footer class="invoice-footer">
+            <p>This is a digitally signed document.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
