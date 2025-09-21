@@ -21,12 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let GST_RATE = 0.0; // Default GST Rate
+    let DISCOUNT_RATE = 0.0; // Default Discount Rate
 
     function getGSTRate() {
         const gstRateInput = document.getElementById('gst-rate-input');
         let rate = 0.0;
         if (gstRateInput) {
             rate = parseFloat(gstRateInput.textContent) / 100 || 0.0;
+        }
+        return rate;
+    }
+
+    function getDiscountRate() {
+        const discountRateInput = document.getElementById('discount-rate-input');
+        let rate = 0.0;
+        if (discountRateInput) {
+            rate = parseFloat(discountRateInput.textContent) / 100 || 0.0;
         }
         return rate;
     }
@@ -44,7 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let netAmt = rate * qty;
         GST_RATE = getGSTRate();
         let taxAmt = netAmt * GST_RATE;
-        let totalAmt = netAmt + taxAmt;
+        
+        let totalAmtBeforeDiscount = netAmt + taxAmt;
+        DISCOUNT_RATE = getDiscountRate();
+        let totalAmt = totalAmtBeforeDiscount * (1 - DISCOUNT_RATE); // Apply discount after tax
 
         netAmtElement.textContent = netAmt.toFixed(2);
         taxAmtElement.innerHTML = `${taxAmt.toFixed(2)} (${(GST_RATE * 100).toFixed(0)}%)`;
@@ -72,6 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('amount-in-words').textContent = `Total amount (in words): INR ${convertNumberToWords(overallTotal)} Rupees Only.`;
         document.getElementById('total-items-count').textContent = totalItems;
         document.getElementById('total-qty-count').textContent = totalQty;
+
+        // Update Net Amt / Dis Amt header
+        const netAmtHeader = document.getElementById('net-amt-header');
+        if (netAmtHeader) {
+            if (DISCOUNT_RATE > 0) {
+                netAmtHeader.textContent = 'Dis Amt';
+            } else {
+                netAmtHeader.textContent = 'Net Amt';
+            }
+        }
     }
 
     function setupEventListeners(row) {
@@ -91,6 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ['blur', 'keyup'].forEach(evt => {
             gstRateElement.addEventListener(evt, () => {
                 GST_RATE = getGSTRate();
+                document.querySelectorAll('.items-table tbody tr').forEach(row => {
+                    calculateItemTotals(row);
+                });
+            });
+        });
+    }
+
+    const discountRateElement = document.getElementById('discount-rate-input');
+    if (discountRateElement) {
+        ['blur', 'keyup'].forEach(evt => {
+            discountRateElement.addEventListener(evt, () => {
+                DISCOUNT_RATE = getDiscountRate();
                 document.querySelectorAll('.items-table tbody tr').forEach(row => {
                     calculateItemTotals(row);
                 });
