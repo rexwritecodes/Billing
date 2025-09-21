@@ -20,47 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    let GST_RATE = 0.0; // Default GST Rate
-    let DISCOUNT_RATE = 0.0; // Default Discount Rate
-
-    function getGSTRate() {
-        const gstRateInput = document.getElementById('gst-rate-input');
-        let rate = 0.0;
-        if (gstRateInput) {
-            rate = parseFloat(gstRateInput.textContent) / 100 || 0.0;
-        }
-        return rate;
-    }
-
-    function getDiscountRate() {
-        const discountRateInput = document.getElementById('discount-rate-input');
-        let rate = 0.0;
-        if (discountRateInput) {
-            rate = parseFloat(discountRateInput.textContent) / 100 || 0.0;
-        }
-        return rate;
-    }
-
     function calculateItemTotals(row) {
         const rateElement = row.querySelector('.item-rate');
         const qtyElement = row.querySelector('.item-qty');
+        const discountElement = row.querySelector('.item-discount');
+        const gstElement = row.querySelector('.item-gst');
         const netAmtElement = row.querySelector('.item-net-amt');
         const taxAmtElement = row.querySelector('.item-tax-amt');
         const totalAmtElement = row.querySelector('.item-total-amt');
 
         let rate = parseFloat(rateElement.textContent.replace(/,/g, '')) || 0;
         let qty = parseFloat(qtyElement.textContent.replace(/,/g, '')) || 0;
+        let discount = parseFloat(discountElement.textContent.replace(/%/g, '')) / 100 || 0;
+        let gstRate = parseFloat(gstElement.textContent.replace(/%/g, '')) / 100 || 0;
 
         let netAmt = rate * qty;
-        GST_RATE = getGSTRate();
-        let taxAmt = netAmt * GST_RATE;
+        let taxAmt = netAmt * gstRate;
         
         let totalAmtBeforeDiscount = netAmt + taxAmt;
-        DISCOUNT_RATE = getDiscountRate();
-        let totalAmt = totalAmtBeforeDiscount * (1 - DISCOUNT_RATE); // Apply discount after tax
+        let totalAmt = totalAmtBeforeDiscount * (1 - discount); // Apply item-specific discount after tax
 
         netAmtElement.textContent = netAmt.toFixed(2);
-        taxAmtElement.innerHTML = `${taxAmt.toFixed(2)} (${(GST_RATE * 100).toFixed(0)}%)`;
+        taxAmtElement.innerHTML = `${taxAmt.toFixed(2)} (${(gstRate * 100).toFixed(0)}%)`;
         totalAmtElement.textContent = totalAmt.toFixed(2);
 
         updateOverallTotals();
@@ -85,20 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('amount-in-words').textContent = `Total amount (in words): INR ${convertNumberToWords(overallTotal)} Rupees Only.`;
         document.getElementById('total-items-count').textContent = totalItems;
         document.getElementById('total-qty-count').textContent = totalQty;
-
-        // Update Net Amt / Dis Amt header
-        const netAmtHeader = document.getElementById('net-amt-header');
-        if (netAmtHeader) {
-            if (DISCOUNT_RATE > 0) {
-                netAmtHeader.textContent = 'Dis Amt';
-            } else {
-                netAmtHeader.textContent = 'Net Amt';
-            }
-        }
     }
 
     function setupEventListeners(row) {
-        row.querySelectorAll('.item-rate, .item-qty').forEach(element => {
+        row.querySelectorAll('.item-rate, .item-qty, .item-discount, .item-gst').forEach(element => {
             element.addEventListener('input', () => calculateItemTotals(row));
         });
     }
@@ -108,30 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setupEventListeners(row);
         calculateItemTotals(row);
     });
-
-    const gstRateElement = document.getElementById('gst-rate-input');
-    if (gstRateElement) {
-        ['blur', 'keyup'].forEach(evt => {
-            gstRateElement.addEventListener(evt, () => {
-                GST_RATE = getGSTRate();
-                document.querySelectorAll('.items-table tbody tr').forEach(row => {
-                    calculateItemTotals(row);
-                });
-            });
-        });
-    }
-
-    const discountRateElement = document.getElementById('discount-rate-input');
-    if (discountRateElement) {
-        ['blur', 'keyup'].forEach(evt => {
-            discountRateElement.addEventListener(evt, () => {
-                DISCOUNT_RATE = getDiscountRate();
-                document.querySelectorAll('.items-table tbody tr').forEach(row => {
-                    calculateItemTotals(row);
-                });
-            });
-        });
-    }
 
     const addItemButton = document.getElementById('addItem');
     if (addItemButton) {
@@ -146,8 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td contenteditable="true" class="item-hsn-sac"></td>
                 <td contenteditable="true" class="item-rate">0.00</td>
                 <td contenteditable="true" class="item-qty">0</td>
+                <td contenteditable="true" class="item-discount">0%</td>
+                <td contenteditable="true" class="item-gst">0%</td>
                 <td contenteditable="true" class="item-net-amt">0.00</td>
-<td contenteditable="false" class="item-tax-amt">0.00 (${(getGSTRate() * 100).toFixed(0)}%)</td>
+<td contenteditable="false" class="item-tax-amt">0.00 (0%)</td>
                 <td contenteditable="true" class="item-total-amt">0.00</td>
             `;
             tbody.appendChild(newRow);
