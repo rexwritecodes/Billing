@@ -105,6 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const removeItemButton = document.getElementById('removeItem');
+    if (removeItemButton) {
+        removeItemButton.addEventListener('click', function () {
+            const tbody = document.querySelector('.items-table tbody');
+            const rowCount = tbody.children.length;
+            if (rowCount > 1) { // Ensure at least one row remains
+                tbody.removeChild(tbody.lastElementChild);
+                updateOverallTotals();
+            }
+        });
+    }
+
     function convertNumberToWords(amount) {
         const words = [
             '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
