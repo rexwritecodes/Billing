@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td contenteditable="true" class="item-discount">0%</td>
                 <td contenteditable="true" class="item-gst">0%</td>
                 <td contenteditable="true" class="item-net-amt">0.00</td>
-<td contenteditable="false" class="item-tax-amt">0.00 (0%)</td>
+<td contenteditable="true" class="item-tax-amt">0.00 (0%)</td>
                 <td contenteditable="true" class="item-total-amt">0.00</td>
             `;
             tbody.appendChild(newRow);
