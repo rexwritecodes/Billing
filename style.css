@@ -9,6 +9,7 @@ body {
 @media print {
   .print-button,
   #addItem,
+  #removeItem,
   #gst-rate-input,
   .invoice-header h1 {
     display: none;
